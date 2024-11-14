@@ -1,0 +1,7 @@
+Saved to Sevkupno.csv.
+Time taken: 22.25 minutes
+#Паралелно ги влечевме податоците на сите компании
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        results = list(executor.map(fetch_data, kodovi))
+#Ја намаливме паузата измеѓу од 1 секунда на пола
+time.sleep(0.5)
