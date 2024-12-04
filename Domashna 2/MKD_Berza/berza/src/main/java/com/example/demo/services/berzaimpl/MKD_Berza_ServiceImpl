@@ -1,0 +1,26 @@
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class MKD_Berza_ServiceImpl implements MKD_Berza_Service {
+
+    private final MKD_Berza_Repository mkd_berza;
+
+    @Autowired
+    public MKD_Berza_ServiceImpl(MKD_Berza_Repository mkd_berza) {
+        this.mkd_berza = mkd_berza;
+    }
+
+    @Override
+    public List<MKD_Berza> getAllBerzi() {
+        return MKD_Berza_Repository.findAll();
+    }
+
+    @Override
+    public MKD_Berza getBerzaPrekuSifra(Long sifra) {
+        Optional<MKD_Berza> berza = MKD_Berza.findById(sifra);
+        return MKD_Berza.get();
+    }
+}

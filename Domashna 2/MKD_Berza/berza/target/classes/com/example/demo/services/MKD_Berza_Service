@@ -1,0 +1,8 @@
+import java.util.List;
+
+public interface MKD_Berza_Service {
+
+    List<MKD_Berza> getAllBerzi();
+
+    MKD_Berza getBerzaPrekuSifra(Long sifra);
+}

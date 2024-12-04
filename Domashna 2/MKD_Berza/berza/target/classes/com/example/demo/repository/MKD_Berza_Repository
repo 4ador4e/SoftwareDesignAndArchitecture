@@ -1,0 +1,8 @@
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+
+public interface MKD_Berza_Repository extends JpaRepository<MKD_Berza, Long> {
+
+    Optional<MKD_Berza> findById(Long id);
+}

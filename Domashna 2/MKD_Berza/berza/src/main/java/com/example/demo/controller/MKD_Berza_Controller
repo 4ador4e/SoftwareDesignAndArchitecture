@@ -1,0 +1,35 @@
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
+@RestController
+@RequestMapping(value = "/api/mkd_berza")
+@Validated
+@CrossOrigin(origins="*")
+
+public class MKD_Berza_Controller {
+
+    private final MKD_Berza_Service mkd_berza;
+
+    @Autowired
+    public MKD_Berza_Controller(MKD_Berza_Service mkd_berza_service) {
+        this.mkd_berza_service = mkd_berza_service;
+    }
+
+    @GetMapping(value = "/all")
+    public ResponseEntity<List<MKD_Berza>> getAllBerzi() {
+        List<MKD_Berza> mkd_berza = mkd_berza_service.getAllBerzi();
+        return new ResponseEntity<>(mkd_berza, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<MKD_Berza> getMKD_Berza_sifra(@PathVariable(value = "sifra") Long sifra){
+        MKD_Berza mkd_berza = mkd_berza_service.getBerzaPrekuSifra(sifra);
+        return new ResponseEntity<>(mkd_berza, HttpStatus.OK);
+    }
+}
