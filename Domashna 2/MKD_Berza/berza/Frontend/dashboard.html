@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MKStocks - Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .dashboard-container {
+      display: flex;
+    }
+
+    
+    .sidebar {
+      width: 250px;
+      background-color: #f5f5fa;
+      padding: 20px;
+      height: 100vh;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+    }
+
+    .sidebar h2 {
+      color: #333;
+      margin-bottom: 30px;
+      font-size: 24px;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 12px 20px;
+      text-decoration: none;
+      color: #555;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      transition: background 0.3s;
+    }
+
+    .sidebar a.active, .sidebar a:hover {
+      background-color: #d8d8e5;
+      color: #333;
+    }
+
+
+    .main-content {
+      flex: 1;
+      padding: 30px;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      margin: 0;
+      color: #333;
+    }
+
+    .header button {
+      background-color: #6c63ff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+
+    .graph-container, .rating-container, .most-bought-stocks {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .graph-container h3 {
+      margin-top: 0;
+    }
+
+
+    .bar-chart {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+
+    .bar {
+      width: 20px;
+      background-color: #6c63ff;
+      border-radius: 5px;
+      height: 100px;
+    }
+
+
+    .ratings {
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+    }
+
+    .circle {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .circle.blue { background-color: #6c63ff; }
+    .circle.orange { background-color: #ffa500; }
+    .circle.cyan { background-color: #00bcd4; }
+
+
+    .most-bought-stocks ul {
+      list-style-type: none;
+    }
+
+    .most-bought-stocks li {
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
+      font-size: 16px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+
+  <div class="sidebar">
+    <h2>MKStocks</h2>
+    <a href="#" class="active">Dashboard</a>
+    <a href="#">Settings</a>
+    <a href="#">Accounts</a>
+    <a href="#">Help</a>
+  </div>
+
+
+  <div class="main-content">
+    <div class="header">
+      <h1>Dashboard</h1>
+      <button>View Report</button>
+    </div>
+
+
+    <div class="graph-container">
+      <h3>Revenue: IDR 7.852.000</h3>
+      <p><span style="color: green;">▲ 2.1%</span> vs last week</p>
+      <div class="bar-chart">
+        <div class="bar" style="height: 100px;"></div>
+        <div class="bar" style="height: 80px;"></div>
+        <div class="bar" style="height: 120px;"></div>
+        <div class="bar" style="height: 90px;"></div>
+        <div class="bar" style="height: 110px;"></div>
+        <div class="bar" style="height: 70px;"></div>
+      </div>
+    </div>
+
+
+    <div class="rating-container">
+      <h3>Your Rating</h3>
+      <div class="ratings">
+        <div class="circle blue">85%<br>True Information</div>
+        <div class="circle orange">85%<br>Fast Updates</div>
+        <div class="circle cyan">92%<br>Security</div>
+      </div>
+    </div>
+
+
+    <div class="most-bought-stocks">
+      <h3>Most Bought Stocks</h3>
+      <ul>
+        <li>Alkaloid - DEN 45,000</li>
+        <li>Komercijalna banka - DEN 75,000</li>
+        <li>Zegin - DEN 45,000</li>
+        <li>Prilepska Pivara - DEN 45,000</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
