@@ -1,1 +1,12 @@
-
+Vo technickata analizaz edna greska so nemozev nikako da ja koregiram e so edno dimenzionalnite delovi od data frames gi
+racunase kako dvo dimenzionalni nizi ValueError: Data must be 1-dimensional, got ndarray of shape (501, 1) instead.
+Najverovatno pricinata za ova e deka koristam druga (neprakticna) biblioteka za da gi implementiram oscilatorite, taa biblioteka
+e samo "ta", a bibliotekata so sakav da ja koristam e ta-lib. Ovaa biblioteka nemozev nikako da ja snimam so pip.
+Ovaa biblioteka probav da ja spustam na mnogu razlicni nacini (conda, miniconda, cmd) i sekogas ke mi izleze ovaj error :
+Failed to build ta-lib
+ERROR: Could not build wheels for ta-lib, which is required to install pyproject.toml-based projects
+Ovaj proekt go imav pocnato vo Bitola kade sto kodot mi rabotese so ta-lib, no sega vo Skopje pola od kodot go pisev "na slepo".
+Presmetkite i signalite se tocni. Za sekoe od niv gi zemav formulite i kalkulaciite. Primer za Williams identifikuva odpoke kupeni
+i prodadeni condicii vo marketot i e kalkuliran vo negativa. Williams = (Highest High - Currect Close) / (Highest High - Lowest Low) / -100
+So funkciite uspeav da ne kalkuluram 30 pati (za sekoj oscilator i moving average na razlicni intervali), na ovaj nacin samo trebase
+ednas da iskalkuliram potoa samo so data.resample go menuvam sample intervalot.
