@@ -4,52 +4,66 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MKStocks - Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist@2.17.1/plotly.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
+      background-color: #f0f4f7;
+      color: #34495e;
     }
 
     .dashboard-container {
       display: flex;
+      height: 100vh;
+      flex-wrap: wrap;
     }
 
     .sidebar {
       width: 250px;
-      background-color: #f5f5fa;
+      background-color: #2c3e50;
+      color: white;
       padding: 20px;
       height: 100vh;
-      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-      box-sizing: border-box;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar:hover {
+      width: 270px;
     }
 
     .sidebar h2 {
-      color: #333;
-      margin-bottom: 30px;
+      margin-top: 0;
       font-size: 24px;
     }
 
     .sidebar a {
       display: block;
-      padding: 12px 20px;
+      color: white;
       text-decoration: none;
-      color: #555;
+      margin: 15px 0;
+      font-size: 18px;
+      padding: 10px;
       border-radius: 5px;
-      margin-bottom: 10px;
-      transition: background 0.3s;
+      transition: background-color 0.3s ease, padding 0.3s ease;
     }
 
-    .sidebar a.active, .sidebar a:hover {
-      background-color: #d8d8e5;
-      color: #333;
+    .sidebar a:hover {
+      background-color: #2980b9;
+      padding-left: 15px;
+    }
+
+    .sidebar a.active {
+      font-weight: bold;
+      background-color: #3498db;
     }
 
     .main-content {
+      padding: 20px;
       flex: 1;
-      padding: 30px;
-      box-sizing: border-box;
-      overflow-y: auto;
+      background-color: #ecf0f1;
+      overflow: auto;
     }
 
     .header {
@@ -61,70 +75,78 @@
 
     .header h1 {
       margin: 0;
-      color: #333;
+      font-size: 32px;
     }
 
-    .header button {
-      background-color: #6c63ff;
+    button {
+      background-color: #2980b9;
       color: white;
+      padding: 12px;
       border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
       cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
     }
 
-    .content-section {
-      margin-bottom: 20px;
+    button:hover {
+      background-color: #3498db;
+      transform: scale(1.05);
     }
 
-    .content-section h3 {
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .section h3 {
+      color: #2c3e50;
+      font-size: 24px;
       margin-bottom: 10px;
     }
 
-    .table-container {
-      background: white;
+    .graph-container, .rating-container, .most-bought-container, .stock-trends-container, .technical-indicators-graph {
+      background-color: white;
       padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    table th, table td {
-      border: 1px solid #ddd;
+    .trend-item {
       padding: 10px;
-      text-align: left;
-    }
-
-    table th {
-      background-color: #f4f4f9;
-      color: #333;
-    }
-
-    .graph-container {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .bar-chart {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 20px;
-    }
-
-    .bar {
-      width: 20px;
-      background-color: #6c63ff;
+      background: rgba(0, 0, 0, 0.05);
+      margin-bottom: 15px;
       border-radius: 5px;
-      text-align: center;
-      color: white;
-      font-size: 12px;
-      margin: 0 5px;
+      transition: background 0.3s ease;
+    }
+
+    .trend-item:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    .trend-item h4 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .trend-item p {
+      margin: 5px 0;
+    }
+
+    /* Media query for smaller screens */
+    @media (max-width: 768px) {
+      .dashboard-container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        height: auto;
+        margin-bottom: 20px;
+      }
+
+      .main-content {
+        flex: none;
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -142,51 +164,160 @@
   <div class="main-content">
     <div class="header">
       <h1>Dashboard</h1>
-      <button>View Report</button>
+      <button onclick="viewReport()">View Report</button>
     </div>
 
-    <div class="content-section">
+    <div class="section graph-container">
+      <h3>Sentiment Analysis</h3>
+      <ul id="sentiment-analysis">
+        <li>Loading...</li>
+      </ul>
+    </div>
+
+    <div class="section rating-container">
+      <h3>Technical Indicators</h3>
+      <p>RSI: <span id="rsi">Loading...</span></p>
+      <p>MACD: <span id="macd">Loading...</span></p>
+      <p>Stochastic: <span id="stoch">Loading...</span></p>
+      <p>CCI: <span id="cci">Loading...</span></p>
+    </div>
+
+    <div class="section most-bought-container">
       <h3>Most Bought Stocks</h3>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Stock Code</th>
-              <th>Stock Name</th>
-              <th>Quantity</th>
-              <th>Price</th>
-            </tr>
-          </thead>
-          <tbody>
-
-            {% for stock in stock_data %}
-            <tr>
-              <td>{{ stock.code }}</td>
-              <td>{{ stock.name }}</td>
-              <td>{{ stock.quantity }}</td>
-              <td>{{ stock.price }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+      <ul id="most-bought-stocks">
+        <li>Loading...</li>
+      </ul>
     </div>
 
-    <div class="content-section">
+    <div class="section stock-trends-container">
       <h3>Stock Trends</h3>
-      <div class="graph-container">
-        <div class="bar-chart">
-          {% for stock in stock_trends %}
-          <div class="bar" style="height:100px;">
-            {{ stock.code }}
-          </div>
-          {% endfor %}
+      <div class="trends-list" id="stock-trends">
+        <div class="trend-item">
+          <h4>Stock 1</h4>
+          <p>Price: $120</p>
+          <p>Change: +2.5%</p>
+        </div>
+        <div class="trend-item">
+          <h4>Stock 2</h4>
+          <p>Price: $150</p>
+          <p>Change: -1.2%</p>
+        </div>
+        <div class="trend-item">
+          <h4>Stock 3</h4>
+          <p>Price: $90</p>
+          <p>Change: +0.8%</p>
         </div>
       </div>
     </div>
 
+    <div class="section technical-indicators-graph">
+      <h3>Stock Data & Technical Indicators</h3>
+      <div id="plotly-graph"></div>
+    </div>
+
   </div>
 </div>
+
+<script>
+  async function fetchData(endpoint, callback) {
+    try {
+      const response = await fetch(endpoint);
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+      const data = await response.json();
+      callback(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      alert("There was an error fetching data. Please try again later.");
+    }
+  }
+
+  function displaySentimentAnalysis(data) {
+    if (!data || data.length === 0) return;
+    const sentimentResults = data.map(row => `<li>${row.date}: ${row.sentiment}</li>`).join("");
+    document.getElementById("sentiment-analysis").innerHTML = sentimentResults;
+  }
+
+  function displayTechnicalAnalysis(data) {
+    if (!data) return;
+    document.getElementById("rsi").textContent = data.rsi || "N/A";
+    document.getElementById("macd").textContent = data.macd || "N/A";
+    document.getElementById("stoch").textContent = data.stochastic || "N/A";
+    document.getElementById("cci").textContent = data.cci || "N/A";
+  }
+
+  function displayMostBoughtStocks(data) {
+    if (!data || data.length === 0) return;
+    const mostBoughtResults = data.map(stock => `<li>${stock.name}: ${stock.amount}</li>`).join("");
+    document.getElementById("most-bought-stocks").innerHTML = mostBoughtResults;
+  }
+
+  function displayStockTrends(data) {
+    if (!data || data.length === 0) return;
+    const trendsHTML = data.map(trend => `
+      <div class="trend-item">
+        <h4>${trend.stock}</h4>
+        <p>Price: ${trend.price}</p>
+        <p>Change: ${trend.change}</p>
+      </div>
+    `).join("");
+    document.getElementById("stock-trends").innerHTML = trendsHTML;
+  }
+
+  function viewReport() {
+    alert("Report functionality is coming soon!");
+  }
+
+  function displayPlotlyGraph(data) {
+    const plotData = {
+      x: data.date,
+      close: data.close,
+      open: data.open,
+      high: data.high,
+      low: data.low,
+      rsi: data.rsi,
+      macd: data.macd,
+      stochastic: data.stochastic,
+      predicted: data.predicted
+    };
+
+    const trace1 = {
+      x: plotData.x,
+      close: plotData.close,
+      open: plotData.open,
+      high: plotData.high,
+      low: plotData.low,
+      type: 'candlestick',
+      name: 'Stock Price'
+    };
+
+    const trace2 = {
+      x: plotData.x,
+      y: plotData.predicted,
+      type: 'scatter',
+      mode: 'lines',
+      name: 'Predicted Price',
+      line: { dash: 'dot' }
+    };
+
+    const layout = {
+      title: 'Stock Price and Predictions',
+      xaxis: { rangeslider: { visible: false } },
+      yaxis: { title: 'Price' }
+    };
+
+    Plotly.newPlot('plotly-graph', [trace1, trace2], layout);
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    fetchData('/api/sentiment', displaySentimentAnalysis);
+    fetchData('/api/technical-indicators', displayTechnicalAnalysis);
+    fetchData('/api/most-bought', displayMostBoughtStocks);
+    fetchData('/api/stock-trends', displayStockTrends);
+    fetchData('/api/stock-data', displayPlotlyGraph);
+  });
+</script>
 
 </body>
 </html>
